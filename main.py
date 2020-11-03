@@ -1,6 +1,13 @@
 from flask import request, flash, render_template, Flask
 
+from flask_sqlalchemy import SQLAlchemy
+
 app = Flask(__name__)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = open("/srv/covid_form/database.pem").read()
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+db = SQLAlchemy(app)
 
 symptoms = dict(
     fever = "Fever or chills",
@@ -12,6 +19,35 @@ symptoms = dict(
     nausea = " Nausea, vomiting, diarrhea, abdominal pain ",
     tired = " Not feeling well, extreme tiredness, sore muscles "
 )
+
+dbcol = db.Column
+dbint = db.Integer
+dbbool = db.Boolean
+dblong = db.BigInteger
+dbstr = db.String
+
+class Organizations(db.Model):
+    id = dbcol(dbint, primary_key = True)
+    key = dbcol(dbstr(128), unique = True)
+    name = dbcol(dbstr(1024), unique = True)
+
+    __tablename__ = "organizations"
+
+class FormResponses(db.Model):
+    id = dbcol(dbint, primary_key = True)
+    time = dbcol(dblong, nullable = False)
+    name = dbcol(dbstr(128), nullable = False)
+    organization = dbcol(dbint, db.ForeignKey(Organizations.id), nullable = True)
+    
+    for k in symptoms:
+        vars()[k] = dbcol(dbbool, nullable = False)
+
+    travel = dbcol(dbbool, nullable = False)
+    contact = dbcol(dbbool, nullable = False)
+
+    __tablename__ = "form_responses"
+
+db.create_all()
 
 def form_val(key):
     return request.form.get(key)
