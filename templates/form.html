@@ -19,7 +19,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js" defer></script>
 
     <!-- Auto-init -->
-    <script src="/static/auto-init.js" defer></script>
+    <script src="/static/script.js" defer></script>
   </head>
 
   <body>
@@ -31,11 +31,11 @@
       <div class="col s12">
         <ul class="tabs">
           <li class="tab col s6">
-            <a href="#">Internal</a>
+            <a onclick="internal()">Internal</a>
           </li>
 
           <li class="tab col s6">
-            <a href="#">External</a>
+            <a onclick="external()">External</a>
           </li>
         </ul>
       </div>
@@ -46,11 +46,29 @@
       <h1>Covid Reporting Form</h1>
 
       <form method="post">
+        <input id="form_type" name="form_type" type="text" hidden />
+
         <h3> Personal Information </h3>
 
         <div class="input-field">
           <input id="fullname" name="fullname" type="text" class="validate">
           <label for="fullname">Full Name</label>
+        </div>
+
+        <div id="external" hidden>
+          <h3> Organization </h3>
+
+          <br>
+
+          <div class="input-field">
+            <select>
+              <option value="" disabled selected>Choose your option</option>
+              {% for i, v in dd %}
+                <option value="{{ i }}">{{ v }}</option>
+              {% endfor %}
+            </select>
+            <label>Organization</label>
+          </div>
         </div>
 
         <h3> Symptoms </h3>
@@ -70,7 +88,7 @@
         <div class="switch">
           <label>
             No
-            <input type="checkbox">
+            <input type="checkbox" name="fever">
             <span class="lever"></span>
             Yes
           </label>
@@ -83,7 +101,7 @@
         <div class="switch">
           <label>
             No
-            <input type="checkbox">
+            <input type="checkbox" name="breathing">
             <span class="lever"></span>
             Yes
           </label>
@@ -96,7 +114,7 @@
         <div class="switch">
           <label>
             No
-            <input type="checkbox">
+            <input type="checkbox" name="cough">
             <span class="lever"></span>
             Yes
           </label>
@@ -109,7 +127,7 @@
         <div class="switch">
           <label>
             No
-            <input type="checkbox">
+            <input type="checkbox" name="throat">
             <span class="lever"></span>
             Yes
           </label>
@@ -122,7 +140,7 @@
         <div class="switch">
           <label>
             No
-            <input type="checkbox">
+            <input type="checkbox" name="nose">
             <span class="lever"></span>
             Yes
           </label>
@@ -135,7 +153,7 @@
         <div class="switch">
           <label>
             No
-            <input type="checkbox">
+            <input type="checkbox" name="taste">
             <span class="lever"></span>
             Yes
           </label>
@@ -148,7 +166,7 @@
         <div class="switch">
           <label>
             No
-            <input type="checkbox">
+            <input type="checkbox" name="nausea">
             <span class="lever"></span>
             Yes
           </label>
@@ -161,7 +179,7 @@
         <div class="switch">
           <label>
             No
-            <input type="checkbox">
+            <input type="checkbox" name="tired">
             <span class="lever"></span>
             Yes
           </label>
@@ -176,7 +194,7 @@
         <div class="switch">
           <label>
             No
-            <input type="checkbox">
+            <input type="checkbox" name="travel">
             <span class="lever"></span>
             Yes
           </label>
@@ -191,7 +209,7 @@
         <div class="switch">
           <label>
             No
-            <input type="checkbox">
+            <input type="checkbox" name="close_contact">
             <span class="lever"></span>
             Yes
           </label>
@@ -208,18 +226,18 @@
         </p>
 
         <ul class="collection">
-          <li class="collection-item">Go home to self-isolate</li>
+          <li class="collection-item">Go home to self-isolate.</li>
 
           <li class="collection-item">
-            Contact your direct Supervisor/Manager or HR
+            Contact your direct Supervisor/Manager or HR.
           </li>
 
           <li class="collection-item">
-            Complete the <a href="https://covid-19.ontario.ca/self-assessment/">online Self-Assessment</a> (https://covid-19.ontario.ca/self-assessment/)
+            Complete the <a href="https://covid-19.ontario.ca/self-assessment/">online Self-Assessment.</a> (https://covid-19.ontario.ca/self-assessment/)
           </li>
 
           <li class="collection-item">
-            Contact your Healthcare provider or <a href="tel:18667970000">Telehealth Ontario</a> (1 866-797-0000)
+            Contact your Healthcare provider or <a href="tel:18667970000">Telehealth Ontario</a>. (1 866-797-0000)
           </li>
         </ul>
 
