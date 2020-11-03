@@ -46,13 +46,13 @@
       <h1>Covid Reporting Form</h1>
 
       <form method="post">
-        <input id="form_type" name="form_type" type="text" hidden />
+        <input id="form_type" name="form_type" type="text" value="internal" hidden />
 
         <h3> Personal Information </h3>
 
         <div class="input-field">
-          <input id="fullname" name="fullname" type="text" class="validate">
-          <label for="fullname">Full Name</label>
+          <input id="name" name="name" type="text" class="validate" required>
+          <label for="name">Full Name</label>
         </div>
 
         <div id="external" hidden>
@@ -61,7 +61,7 @@
           <br>
 
           <div class="input-field">
-            <select>
+            <select name="organization">
               <option value="" disabled selected>Choose your option</option>
               {% for i, v in dd %}
                 <option value="{{ i }}">{{ v }}</option>
@@ -81,109 +81,18 @@
           Answer <b>Yes</b> or <b>No</b>:
         </p>
 
-        <p>
-          Fever or chills
-        </p>
+        {% for k, v in symptoms.items() %}
+          <p> {{ v }} </p>
 
-        <div class="switch">
-          <label>
-            No
-            <input type="checkbox" name="fever">
-            <span class="lever"></span>
-            Yes
-          </label>
-        </div>
-
-        <p>
-          Difficulty breathing or shortness of breath
-        </p>
-
-        <div class="switch">
-          <label>
-            No
-            <input type="checkbox" name="breathing">
-            <span class="lever"></span>
-            Yes
-          </label>
-        </div>
-
-        <p>
-          Cough
-        </p>
-
-        <div class="switch">
-          <label>
-            No
-            <input type="checkbox" name="cough">
-            <span class="lever"></span>
-            Yes
-          </label>
-        </div>
-
-        <p>
-          Sore throat, trouble swallowing
-        </p>
-
-        <div class="switch">
-          <label>
-            No
-            <input type="checkbox" name="throat">
-            <span class="lever"></span>
-            Yes
-          </label>
-        </div>
-
-        <p>
-          Runny nose/stuffy nose or nasal congestion
-        </p>
-
-        <div class="switch">
-          <label>
-            No
-            <input type="checkbox" name="nose">
-            <span class="lever"></span>
-            Yes
-          </label>
-        </div>
-
-        <p>
-          Decrease or loss of smell or taste
-        </p>
-
-        <div class="switch">
-          <label>
-            No
-            <input type="checkbox" name="taste">
-            <span class="lever"></span>
-            Yes
-          </label>
-        </div>
-
-        <p>
-          Nausea, vomiting, diarrhea, abdominal pain
-        </p>
-
-        <div class="switch">
-          <label>
-            No
-            <input type="checkbox" name="nausea">
-            <span class="lever"></span>
-            Yes
-          </label>
-        </div>
-
-        <p>
-          Not feeling well, extreme tiredness, sore muscles
-        </p>
-
-        <div class="switch">
-          <label>
-            No
-            <input type="checkbox" name="tired">
-            <span class="lever"></span>
-            Yes
-          </label>
-        </div>
+          <div class="switch">
+            <label>
+              No
+              <input type="checkbox" name="{{ k }}">
+              <span class="lever"></span>
+              Yes
+            </label>
+          </div>
+        {% endfor %}
 
         <h3> Travel </h3>
 
@@ -209,7 +118,7 @@
         <div class="switch">
           <label>
             No
-            <input type="checkbox" name="close_contact">
+            <input type="checkbox" name="contact">
             <span class="lever"></span>
             Yes
           </label>
