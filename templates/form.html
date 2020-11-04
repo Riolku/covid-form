@@ -45,6 +45,12 @@
 
       <h1>Covid Reporting Form</h1>
 
+      {% if status %}
+
+      <div class="card-panel {{colour}}">{{msg}}</div>
+
+      {% endif %}
+
       <form method="post">
         <input id="form_type" name="form_type" type="text" value="internal" hidden />
 

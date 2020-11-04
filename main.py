@@ -2,6 +2,8 @@ from flask import request, flash, render_template, Flask
 
 from flask_sqlalchemy import SQLAlchemy
 
+import time
+
 app = Flask(__name__)
 
 app.config['SQLALCHEMY_DATABASE_URI'] = open("/srv/covid_form/database.pem").read()
@@ -57,27 +59,59 @@ def check_form(key):
 
 @app.route("/", methods = ["GET", "POST"])
 def serve():
+    msg = ""
+    colour = None
+    status = None
+
     if request.method == "POST":
+        error = False
+        
         name = form_val('name')
 
-        organization = form_val('organization')
+        if not name.strip():
+            msg = "Please enter your name!"
+            colour = "red lighten-1"
+            status = "error"
+        else:
 
-        form_type = form_val('form_type')
+            organization = form_val('organization')
 
-        symptom_vals = { v : check_form(v) for v in symptoms.keys() }
+            form_type = form_val('form_type')
 
-        travel = check_form('travel')
+            symptom_vals = { v : check_form(v) for v in symptoms.keys() }
 
-        contact = check_form('contact')
+            travel = check_form('travel')
 
-        print(form_type, name, organization, symptom_vals, travel, contact)
+            contact = check_form('contact')
+
+            oid = None
+            if form_type == "external":
+                o = Organizations.query.filter_by(key = organization).first()
+        
+                if o is None:
+                    msg = "No such organization!"
+                    colour = "red lighten-1"
+                    status = "error"
+
+                else:
+                    oid = o.id
+
+            if status is None:
+
+                r = FormResponses(name = name, organization = oid, **symptom_vals, travel = travel, contact = contact, time = int(time.time()))
+
+                db.session.add(r)
+
+                db.session.commit()
+
+                msg = "Your response was recorded successfully!"
+
+                colour = "light-green accent-2"
+            
+                status = "success"
 
 
-    return render_template("form.html", dd = [
-        ("a", "C. A"),
-        ("b", "C. B"),
-        ("c", "C. C")
-    ], symptoms = symptoms)
+    return render_template("form.html", msg = msg, status = status, colour = colour, dd = [(o.key, o.name) for o in Organizations.query.all()], symptoms = symptoms)
 
 if __name__ == "__main__":
     app.run(port = 8000, debug = True)
