@@ -57,6 +57,8 @@ def form_val(key):
 def check_form(key):
     return form_val(key) == 'on'
 
+errcolour = "red accent-1"
+
 @app.route("/", methods = ["GET", "POST"])
 def serve():
     msg = ""
@@ -70,7 +72,7 @@ def serve():
 
         if not name.strip():
             msg = "Please enter your name!"
-            colour = "red lighten-1"
+            colour = errcolour
             status = "error"
         else:
 
@@ -90,7 +92,7 @@ def serve():
         
                 if o is None:
                     msg = "No such organization!"
-                    colour = "red lighten-1"
+                    colour = errcolour
                     status = "error"
 
                 else:
@@ -106,7 +108,7 @@ def serve():
 
                 msg = "Your response was recorded successfully!"
 
-                colour = "light-green accent-2"
+                colour = "green accent-2"
             
                 status = "success"
 
