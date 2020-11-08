@@ -11,17 +11,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-symptoms = dict(
-    fever = "Fever or chills",
-    breathing = "Difficulty breathing or shortness of breath",
-    cough = "Cough",
-    throat = " Sore throat, trouble swallowing ",
-    nose = " Runny nose/stuffy nose or nasal congestion ",
-    taste = " Decrease or loss of smell or taste ",
-    nausea = " Nausea, vomiting, diarrhea, abdominal pain ",
-    tired = " Not feeling well, extreme tiredness, sore muscles "
-)
-
 dbcol = db.Column
 dbint = db.Integer
 dbbool = db.Boolean
@@ -33,17 +22,13 @@ class Organizations(db.Model):
     key = dbcol(dbstr(128), unique = True)
     name = dbcol(dbstr(1024), unique = True)
 
-    __tablename__ = "organizations"
-
 class FormResponses(db.Model):
     id = dbcol(dbint, primary_key = True)
     time = dbcol(dblong, nullable = False)
     name = dbcol(dbstr(128), nullable = False)
     organization = dbcol(dbint, db.ForeignKey(Organizations.id), nullable = True)
     
-    for k in symptoms:
-        vars()[k] = dbcol(dbbool, nullable = False)
-
+    symptoms = dbcol(dbbool, nullable = False)
     travel = dbcol(dbbool, nullable = False)
     contact = dbcol(dbbool, nullable = False)
 
@@ -80,7 +65,7 @@ def serve():
 
             form_type = form_val('form_type')
 
-            symptom_vals = { v : check_form(v) for v in symptoms.keys() }
+            symptoms = form_val('symptoms')
 
             travel = check_form('travel')
 
@@ -100,7 +85,7 @@ def serve():
 
             if status is None:
 
-                r = FormResponses(name = name, organization = oid, **symptom_vals, travel = travel, contact = contact, time = int(time.time()))
+                r = FormResponses(name = name, organization = oid, symptoms = symptoms, travel = travel, contact = contact, time = int(time.time()))
 
                 db.session.add(r)
 
@@ -113,7 +98,7 @@ def serve():
                 status = "success"
 
 
-    return render_template("form.html", msg = msg, status = status, colour = colour, dd = [(o.key, o.name) for o in Organizations.query.all()], symptoms = symptoms)
+    return render_template("form.html", msg = msg, status = status, colour = colour, dd = [(o.key, o.name) for o in Organizations.query.all()])
 
 if __name__ == "__main__":
     app.run(port = 8000, debug = True)

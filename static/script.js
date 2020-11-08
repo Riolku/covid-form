@@ -11,3 +11,4 @@ function external() {
 
   $("#form_type").attr("value", "external");
 }
+

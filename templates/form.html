@@ -18,27 +18,13 @@
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js" defer></script>
 
-    <!-- Auto-init -->
+    <!-- Site Script -->
     <script src="/static/script.js" defer></script>
   </head>
 
   <body>
     <div class="parallax-container">
       <div class="parallax"><img src="/static/img.jpg"></div>
-    </div>
-
-    <div class="row">
-      <div class="col s12">
-        <ul class="tabs">
-          <li class="tab col s6">
-            <a onclick="internal()">Internal</a>
-          </li>
-
-          <li class="tab col s6">
-            <a onclick="external()">External</a>
-          </li>
-        </ul>
-      </div>
     </div>
 
     <div class="container">
@@ -52,8 +38,6 @@
       {% endif %}
 
       <form method="post">
-        <input id="form_type" name="form_type" type="text" value="internal" hidden />
-
         <h3> Personal Information </h3>
 
         <div class="input-field">
@@ -87,18 +71,16 @@
           Answer <b>Yes</b> or <b>No</b>:
         </p>
 
-        {% for k, v in symptoms.items() %}
-          <p> {{ v }} </p>
+        <p> {{ v }} </p>
 
-          <div class="switch">
-            <label>
-              No
-              <input type="checkbox" name="{{ k }}">
-              <span class="lever"></span>
-              Yes
-            </label>
-          </div>
-        {% endfor %}
+        <div class="switch">
+          <label>
+            No
+            <input type="checkbox" name="{{ k }}">
+            <span class="lever"></span>
+            Yes
+          </label>
+        </div>
 
         <h3> Travel </h3>
 
@@ -121,14 +103,20 @@
           Have you had close contact with a confirmed or probable case of COVID-19? (<b>Yes</b> or <b>No</b>)
         </p>
 
-        <div class="switch">
-          <label>
-            No
-            <input type="checkbox" name="contact">
-            <span class="lever"></span>
-            Yes
-          </label>
-        </div>
+       <fieldset required>
+         <p>
+           <label>
+             <input class="red" name="group1" type="radio" checked />
+             <span>Yes</span>
+            </label>
+          </p>
+          <p>
+            <label>
+              <input class="green" name="group1" type="radio" />
+              <span>No</span>
+            </label>
+          </p>
+       </fieldset>
 
         <br>
 
