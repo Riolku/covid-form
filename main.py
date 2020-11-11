@@ -17,17 +17,12 @@ dbbool = db.Boolean
 dblong = db.BigInteger
 dbstr = db.String
 
-class Organizations(db.Model):
-    id = dbcol(dbint, primary_key = True)
-    key = dbcol(dbstr(128), unique = True)
-    name = dbcol(dbstr(1024), unique = True)
-
 class FormResponses(db.Model):
     id = dbcol(dbint, primary_key = True)
     time = dbcol(dblong, nullable = False)
-    name = dbcol(dbstr(128), nullable = False)
-    organization = dbcol(dbint, db.ForeignKey(Organizations.id), nullable = True)
-    
+    name = dbcol(dbstr(1024), nullable = False)
+    organization = dbcol(dbstr(4096), nullable = False)
+
     symptoms = dbcol(dbbool, nullable = False)
     travel = dbcol(dbbool, nullable = False)
     contact = dbcol(dbbool, nullable = False)
@@ -52,53 +47,40 @@ def serve():
 
     if request.method == "POST":
         error = False
-        
+
         name = form_val('name')
+        organization = form_val("organization")
 
         if not name.strip():
             msg = "Please enter your name!"
             colour = errcolour
             status = "error"
+
+        if not organization.strip():
+            msg = "Please enter your organization!"
+            colour = errcolour
+            status = "error"
+
         else:
-
-            organization = form_val('organization')
-
-            form_type = form_val('form_type')
-
-            symptoms = form_val('symptoms')
+            symptoms = check_form('symptoms')
 
             travel = check_form('travel')
 
             contact = check_form('contact')
 
-            oid = None
-            if form_type == "external":
-                o = Organizations.query.filter_by(key = organization).first()
-        
-                if o is None:
-                    msg = "No such organization!"
-                    colour = errcolour
-                    status = "error"
+            r = FormResponses(name = name, organization = organization, symptoms = symptoms, travel = travel, contact = contact, time = int(time.time()))
 
-                else:
-                    oid = o.id
+            db.session.add(r)
+            db.session.commit()
 
-            if status is None:
+            msg = "Your response was recorded successfully!"
 
-                r = FormResponses(name = name, organization = oid, symptoms = symptoms, travel = travel, contact = contact, time = int(time.time()))
+            colour = "green accent-2"
 
-                db.session.add(r)
-
-                db.session.commit()
-
-                msg = "Your response was recorded successfully!"
-
-                colour = "green accent-2"
-            
-                status = "success"
+            status = "success"
 
 
-    return render_template("form.html", msg = msg, status = status, colour = colour, dd = [(o.key, o.name) for o in Organizations.query.all()])
+    return render_template("form.html", msg = msg, status = status, colour = colour)
 
 if __name__ == "__main__":
     app.run(port = 8000, debug = True)

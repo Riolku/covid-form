@@ -51,13 +51,8 @@
           <br>
 
           <div class="input-field">
-            <select name="organization">
-              <option value="" disabled selected>Choose your option</option>
-              {% for i, v in dd %}
-                <option value="{{ i }}">{{ v }}</option>
-              {% endfor %}
-            </select>
-            <label>Organization</label>
+            <input id="organization" name="organization" type="text" class="validate" required>
+            <label for="organization">Organization</label>
           </div>
         </div>
 
@@ -67,20 +62,54 @@
           Do you have any of the following new or worsening symptoms or signs? <i>Symptoms should not be chronic or related to other known causes or conditions.</i>
         </p>
 
-        <p>
-          Answer <b>Yes</b> or <b>No</b>:
-        </p>
+        <ul class="collection">
+          <li class="collection-item">
+            Fever or chills
+          </li>
 
-        <p> {{ v }} </p>
+          <li class="collection-item">
+            Difficulty breathing or shortness of breath
+          </li>
 
-        <div class="switch">
-          <label>
-            No
-            <input type="checkbox" name="{{ k }}">
-            <span class="lever"></span>
-            Yes
+          <li class="collection-item">
+            Cough
+          </li>
+
+          <li class="collection-item">
+            Sore throat, trouble swallowing
+          </li>
+
+          <li class="collection-item">
+            Runny nose/stuffy nose or nasal congestion
+          </li>
+
+          <li class="collection-item">
+            Decrease or loss of smell or taste
+          </li>
+
+          <li class="collection-item">
+            Nausea, vomiting, diarrhea, abdominal pain
+          </li>
+
+          <li class="collection-item">
+            Not feeling well, extreme tiredness, sore muscles
+          </li>
+
+        </ul>
+
+        <fieldset class="row">
+         <label class="col s1">
+           <input class="with-gap red" name="symptoms" value="on" type="radio" required />
+           <span>Yes</span>
           </label>
-        </div>
+
+          <label class="sol s1">
+            <input class="with-gap green" name="syptoms" value="off" type="radio" required />
+            <span>No</span>
+          </label>
+        </fieldset>
+
+
 
         <h3> Travel </h3>
 
@@ -88,14 +117,17 @@
           Have you travelled outside of Canada in the past 14 days? (<b>Yes</b> or <b>No</b>)
         </p>
 
-        <div class="switch">
-          <label>
-            No
-            <input type="checkbox" name="travel">
-            <span class="lever"></span>
-            Yes
+        <fieldset class="row">
+         <label class="col s1">
+           <input class="with-gap red" name="travel" value="on" type="radio" required />
+           <span>Yes</span>
           </label>
-        </div>
+
+          <label class="sol s1">
+            <input class="with-gap green" name="travel" value="off" type="radio" required />
+            <span>No</span>
+          </label>
+        </fieldset>
 
         <h3> Close Contact </h3>
 
@@ -103,14 +135,14 @@
           Have you had close contact with a confirmed or probable case of COVID-19? (<b>Yes</b> or <b>No</b>)
         </p>
 
-        <fieldset class="row" required>
+        <fieldset class="row">
          <label class="col s1">
-           <input class="with-gap red" name="group1" type="radio" />
+           <input class="with-gap red" name="contact" value="on" type="radio" required />
            <span>Yes</span>
           </label>
 
           <label class="sol s1">
-            <input class="with-gap green" name="group1" type="radio" />
+            <input class="with-gap green" name="contact" value="off" type="radio" required />
             <span>No</span>
           </label>
         </fieldset>
@@ -138,6 +170,10 @@
 
           <li class="collection-item">
             Contact your Healthcare provider or <a href="tel:18667970000">Telehealth Ontario</a>. (1 866-797-0000)
+          </li>
+
+          <li class="collection-item">
+            You should strongly consider getting tested for COVID-19.
           </li>
         </ul>
 
