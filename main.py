@@ -17,17 +17,12 @@ dbbool = db.Boolean
 dblong = db.BigInteger
 dbstr = db.String
 
-class Organizations(db.Model):
-    id = dbcol(dbint, primary_key = True)
-    key = dbcol(dbstr(128), unique = True)
-    name = dbcol(dbstr(1024), unique = True)
-
 class FormResponses(db.Model):
     id = dbcol(dbint, primary_key = True)
     time = dbcol(dblong, nullable = False)
     name = dbcol(dbstr(128), nullable = False)
     organization = dbcol(dbint, db.ForeignKey(Organizations.id), nullable = True)
-    
+
     symptoms = dbcol(dbbool, nullable = False)
     travel = dbcol(dbbool, nullable = False)
     contact = dbcol(dbbool, nullable = False)
@@ -52,7 +47,7 @@ def serve():
 
     if request.method == "POST":
         error = False
-        
+
         name = form_val('name')
 
         if not name.strip():
@@ -74,7 +69,7 @@ def serve():
             oid = None
             if form_type == "external":
                 o = Organizations.query.filter_by(key = organization).first()
-        
+
                 if o is None:
                     msg = "No such organization!"
                     colour = errcolour
@@ -94,7 +89,7 @@ def serve():
                 msg = "Your response was recorded successfully!"
 
                 colour = "green accent-2"
-            
+
                 status = "success"
 
 
