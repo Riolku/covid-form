@@ -24,7 +24,7 @@
 
   <body>
     <div class="parallax-container">
-      <div class="parallax"><img src="/static/img.jpg"></div>
+      <div class="parallax"><img src="/static/img.jpg" style="height: 10vh"></div>
     </div>
 
     <div class="container">
@@ -42,15 +42,32 @@
 
         <br>
 
-        <div class="input-field">
-          <input id="name" name="name" type="text" class="validate" required>
-          <label for="name">Full Name</label>
-        </div>
+        {% if internal %}
 
-        <div class="input-field">
-          <input id="organization" name="organization" type="text" class="validate" required>
-          <label for="organization">Organization</label>
-        </div>
+          <div class="input-field">
+            <select required>
+              <option value="" disabled selected>Please select your name</option>
+              {% for id, name in employees %}
+                <option value="{{id}}" name="employee">{{ name }}</option>
+              {% endfor %}
+            </select>
+            <label>Name</label>
+          </div>
+
+
+        {% else %}
+
+          <div class="input-field">
+            <input id="name" name="name" type="text" class="validate" required>
+            <label for="name">Full Name</label>
+          </div>
+
+          <div class="input-field">
+            <input id="organization" name="organization" type="text" class="validate" required>
+            <label for="organization">Organization</label>
+          </div>
+
+        {% endif %}
 
         <h3> Symptoms </h3>
 
@@ -185,7 +202,7 @@
     </div>
 
     <div class="parallax-container">
-      <div class="parallax"><img src="/static/img.jpg"></div>
+      <div class="parallax"><img src="/static/img.jpg" style="height: 10vh"></div>
     </div>
   </body>
 

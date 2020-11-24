@@ -17,11 +17,19 @@ dbbool = db.Boolean
 dblong = db.BigInteger
 dbstr = db.String
 
+class Employees(db.Model):
+    id = dbcol(dbint, primary_key = True)
+    name = dbcol(dbstr(1024), nullable = False)
+
+    __tablename__ = "employees"
+
 class FormResponses(db.Model):
     id = dbcol(dbint, primary_key = True)
     time = dbcol(dblong, nullable = False)
-    name = dbcol(dbstr(1024), nullable = False)
-    organization = dbcol(dbstr(4096), nullable = False)
+
+    employee = dbcol(db.ForeignKey(Employees.id), nullable = True)
+    name = dbcol(dbstr(1024), nullable = True)
+    organization = dbcol(dbstr(4096), nullable = True)
 
     symptoms = dbcol(dbbool, nullable = False)
     travel = dbcol(dbbool, nullable = False)
@@ -39,6 +47,31 @@ def check_form(key):
 
 errcolour = "red accent-1"
 
+def parse_form(name, employee, organization):
+    msg = ""
+    colour = None
+    status = None
+
+    symptoms = check_form('symptoms')
+
+    travel = check_form('travel')
+
+    contact = check_form('contact')
+
+    r = FormResponses(name = name, organization = organization, employee = employee, symptoms = symptoms, travel = travel, contact = contact, time = int(time.time()))
+
+    db.session.add(r)
+    db.session.commit()
+
+    msg = "Your response was recorded successfully!"
+
+    colour = "green accent-2"
+
+    status = "success"
+
+    return msg, colour, status
+
+
 @app.route("/", methods = ["GET", "POST"])
 def serve():
     msg = ""
@@ -46,8 +79,6 @@ def serve():
     status = None
 
     if request.method == "POST":
-        error = False
-
         name = form_val('name')
         organization = form_val("organization")
 
@@ -62,24 +93,29 @@ def serve():
             status = "error"
 
         else:
-            symptoms = check_form('symptoms')
-
-            travel = check_form('travel')
-
-            contact = check_form('contact')
-
-            r = FormResponses(name = name, organization = organization, symptoms = symptoms, travel = travel, contact = contact, time = int(time.time()))
-
-            db.session.add(r)
-            db.session.commit()
-
-            msg = "Your response was recorded successfully!"
-
-            colour = "green accent-2"
-
-            status = "success"
+            msg, colour, status = parse_form(name, None, organization)
 
     return render_template("form.html", msg = msg, status = status, colour = colour)
+
+@app.route("/internal", methods = ['GET', 'POST'])
+def serve_internal():
+    msg = ""
+    colour = None
+    status = None
+
+    if request.method == "POST":
+        name = form_val('employee')
+
+        if not name.strip():
+            msg = "Please select your name!"
+            colour = errcolour
+            status = "error"
+
+        else:
+            msg, colour, status = parse_form(None, name, None)
+
+    return render_template("form.html", msg = msg, status = status, colour = colour, internal = True)
+
 
 if __name__ == "__main__":
     app.run(port = 8000, debug = True)
