@@ -23,13 +23,14 @@
   </head>
 
   <body>
-    <div class="parallax-container">
-      <div class="parallax"><img src="/static/img.jpg" style="height: 10vh"></div>
-    </div>
+    <img src="/static/img1.jpg" style="width: 100%">
 
     <div class="container">
-
       <h1>Covid Reporting Form</h1>
+
+      <a href="{{ ext_url }}" style="position: absolute; left: 2vw; top: 5vh; width: 40vw; background-color: #ffffff55; padding: 8px;"><img src="/logo" width="100%" /></a>
+
+      <!--      {{ iframe | safe }} -->
 
       {% if status %}
 
@@ -40,22 +41,21 @@
       <form method="post">
         <h3> Personal Information </h3>
 
-        <br>
-
         {% if internal %}
 
-          <div class="input-field">
-            <select required>
+          <div class="input-field" style="border: 1px solid #e8e8e8">
+            <select required name="name" class="browser-default">
               <option value="" disabled selected>Please select your name</option>
               {% for id, name in employees %}
-                <option value="{{id}}" name="employee">{{ name }}</option>
+                <option value="{{id}}">{{ name }}</option>
               {% endfor %}
             </select>
-            <label>Name</label>
           </div>
 
 
         {% else %}
+
+          <br>
 
           <div class="input-field">
             <input id="name" name="name" type="text" class="validate" required>
@@ -201,9 +201,7 @@
       <br>
     </div>
 
-    <div class="parallax-container">
-      <div class="parallax"><img src="/static/img.jpg" style="height: 10vh"></div>
-    </div>
+    <!-- <img src="/static/img2.jpg" style="width: 100%"> -->
   </body>
 
 </html>

@@ -1,4 +1,4 @@
-from flask import request, flash, render_template, Flask
+from flask import request, flash, render_template, Flask, Response
 
 from flask_sqlalchemy import SQLAlchemy
 
@@ -6,8 +6,13 @@ import time
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = open("/srv/covid_form/database.pem").read()
+CONF_DIR = "/srv/covid_form/"
+
+app.config['SQLALCHEMY_DATABASE_URI'] = open(CONF_DIR + "database.pem").read()
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+iframe = open(CONF_DIR + "iframe.txt").read()
+ext_url = open(CONF_DIR + "url.txt").read()
 
 db = SQLAlchemy(app)
 
@@ -95,7 +100,7 @@ def serve():
         else:
             msg, colour, status = parse_form(name, None, organization)
 
-    return render_template("form.html", msg = msg, status = status, colour = colour)
+    return render_template("form.html", msg = msg, status = status, colour = colour, iframe = iframe, ext_url = ext_url)
 
 @app.route("/internal", methods = ['GET', 'POST'])
 def serve_internal():
@@ -104,7 +109,7 @@ def serve_internal():
     status = None
 
     if request.method == "POST":
-        name = form_val('employee')
+        name = form_val('name')
 
         if not name.strip():
             msg = "Please select your name!"
@@ -112,9 +117,17 @@ def serve_internal():
             status = "error"
 
         else:
-            msg, colour, status = parse_form(None, name, None)
+            msg, colour, status = parse_form(None, int(name), None)
 
-    return render_template("form.html", msg = msg, status = status, colour = colour, internal = True)
+    employees = Employees.query.all()
+
+    return render_template("form.html", msg = msg, status = status, colour = colour, internal = True, iframe = iframe, ext_url = ext_url, employees = [(e.id, e.name) for e in employees])
+
+imgresp = Response(open(CONF_DIR + "logo.png", "rb").read(), mimetype = "image/png")
+
+@app.route("/logo")
+def serve_logo():
+    return imgresp
 
 
 if __name__ == "__main__":
