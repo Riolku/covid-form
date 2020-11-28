@@ -119,7 +119,7 @@ def serve_internal():
         else:
             msg, colour, status = parse_form(None, int(name), None)
 
-    employees = Employees.query.all()
+    employees = Employees.query.order_by(Employees.name).all()
 
     return render_template("form.html", msg = msg, status = status, colour = colour, internal = True, iframe = iframe, ext_url = ext_url, employees = [(e.id, e.name) for e in employees])
 
