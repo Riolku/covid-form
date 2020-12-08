@@ -25,6 +25,7 @@ dbstr = db.String
 class Employees(db.Model):
     id = dbcol(dbint, primary_key = True)
     name = dbcol(dbstr(1024), nullable = False)
+    active = dbcol(dbbool, nullable = False)
 
     __tablename__ = "employees"
 
@@ -119,7 +120,7 @@ def serve_internal():
         else:
             msg, colour, status = parse_form(None, int(name), None)
 
-    employees = Employees.query.order_by(Employees.name).all()
+    employees = Employees.query.filter_by(active = True).order_by(Employees.name).all()
 
     return render_template("form.html", msg = msg, status = status, colour = colour, internal = True, iframe = iframe, ext_url = ext_url, employees = [(e.id, e.name) for e in employees])
 
