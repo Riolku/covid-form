@@ -77,35 +77,55 @@
 
         <ul class="collection">
           <li class="collection-item">
-            Fever or chills
+            Fever and/or chills
           </li>
 
           <li class="collection-item">
-            Difficulty breathing or shortness of breath
+            Cough or Barking Cough (croup)
           </li>
 
           <li class="collection-item">
-            Cough
+            Shortness of Breath
           </li>
 
           <li class="collection-item">
-            Sore throat, trouble swallowing
+            Sore throat
           </li>
 
           <li class="collection-item">
-            Runny nose/stuffy nose or nasal congestion
+            Difficulty Swallowing
           </li>
 
           <li class="collection-item">
-            Decrease or loss of smell or taste
+            Runny or stuffy/congested nose
           </li>
 
           <li class="collection-item">
-            Nausea, vomiting, diarrhea, abdominal pain
+            Decrease or loss of taste or smell
           </li>
 
           <li class="collection-item">
-            Not feeling well, extreme tiredness, sore muscles
+            Pink eye
+          </li>
+
+          <li class="collection-item">
+            Headache
+          </li>
+
+          <li class="collection-item">
+            Digestive Issues like nausea/vomiting, diarrhea, stomach pain
+          </li>
+
+          <li class="collection-item">
+            Muscle Aches
+          </li>
+
+          <li class="collection-item">
+            Extreme tiredness
+          </li>
+
+          <li class="collection-item">
+            Falling down often
           </li>
 
         </ul>
@@ -129,25 +149,25 @@
         <h3> Travel </h3>
 
         <p>
-          Have you travelled outside of Canada in the past 14 days? (<b>Yes</b> or <b>No</b>)
+          Have you travelled outside of Canada in the past 14 days?
         </p>
 
         <div class="row">
           <label class="col s4 m2 l1">
             <input class="with-gap" name="travel" value="on" type="radio" required />
             <span>Yes</span>
-	  </label>
+	        </label>
 
           <label class="col s4 m2 l1">
             <input class="with-gap" name="travel" value="off" type="radio" required />
-	    <span>No</span>
+	          <span>No</span>
           </label>
         </div>
 
         <h3> Close Contact </h3>
 
         <p>
-          Have you had close contact with a confirmed or probable case of COVID-19? (<b>Yes</b> or <b>No</b>)
+          Have you had close contact with a confirmed or probable case of COVID-19?
         </p>
 
         <div class="row">
@@ -162,14 +182,54 @@
           </label>
         </div>
 
-        <br>
+        <h3> Asked to Self Isolate? </h3>
 
         <p>
-          <b> If you answered NO to all questions from 1 through 3, you have passed. </b>
+          Has a doctor, health care provider, or public health unit told you that you should currently be isolating (staying at home)?
+        </p>
+
+        <div class="row">
+         <label class="col s4 m2 l1">
+           <input class="with-gap" name="self_isolate" value="on" type="radio" required />
+           <span>Yes</span>
+          </label>
+
+          <label class="col s4 m2 l1">
+            <input class="with-gap" name="self_isolate" value="off" type="radio" required />
+            <span>No</span>
+          </label>
+        </div>
+
+        <h3>COVID Alert</h3>
+
+        <p>
+          In the last 14 days, have you received a COVID Alert exposure notification on your cell phone?
         </p>
 
         <p>
-          <b> If you answered YES to any question from 1 through 3, you must: </b>
+          If you have received a negative test result, answer "No".
+        </p>
+
+        <div class="row">
+         <label class="col s4 m2 l1">
+           <input class="with-gap" name="covid_alert" value="on" type="radio" required />
+           <span>Yes</span>
+          </label>
+
+          <label class="col s4 m2 l1">
+            <input class="with-gap" name="covid_alert" value="off" type="radio" required />
+            <span>No</span>
+          </label>
+        </div>
+
+        <br>
+
+        <p>
+          <b> If you answered NO to all questions, you have passed. </b>
+        </p>
+
+        <p>
+          <b> If you answered YES to any question, you must: </b>
         </p>
 
         <ul class="collection">
