@@ -40,9 +40,9 @@ class FormResponses(db.Model):
     symptoms = dbcol(dbbool, nullable = False)
     travel = dbcol(dbbool, nullable = False)
     contact = dbcol(dbbool, nullable = False)
-    self_isolate = dbcol(dbbool, nullable = True)
-    covid_alert = dbcol(dbbool, nullable = True)
-    test_results = dbcol(dbbool, nullable = True)
+    self_isolate = dbcol(dbbool, nullable = False) # intentionally null in the database, but not here, to perserve history
+    covid_alert = dbcol(dbbool, nullable = False)
+    test_results = dbcol(dbbool, nullable = False)
 
     __tablename__ = "form_responses"
 
