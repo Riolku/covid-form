@@ -42,6 +42,7 @@ class FormResponses(db.Model):
     contact = dbcol(dbbool, nullable = False)
     self_isolate = dbcol(dbbool, nullable = True)
     covid_alert = dbcol(dbbool, nullable = True)
+    test_results = dbcol(dbbool, nullable = True)
 
     __tablename__ = "form_responses"
 
@@ -65,6 +66,7 @@ def parse_form(name, employee, organization):
     contact = check_form('contact')
     self_isolate = check_form('self_isolate')
     covid_alert = check_form('covid_alert')
+    test_results = check_form('test_results')
 
     r = FormResponses(name = name,
                         organization = organization,
@@ -75,6 +77,7 @@ def parse_form(name, employee, organization):
                         contact = contact,
                         self_isolate = self_isolate,
                         covid_alert = covid_alert,
+                        test_results = test_results,
 
                         time = int(time.time()))
 

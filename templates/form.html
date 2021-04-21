@@ -149,7 +149,11 @@
         <h3> Travel </h3>
 
         <p>
-          Have you travelled outside of Canada in the past 14 days?
+          In the last 14 days, have you or anyone you live with travelled outside of Canada?
+        </p>
+
+        <p>
+          If exempt from quarantine requirements (for  example, an essential worker whocrosses the Canada-US border regularly for work), select "No."
         </p>
 
         <div class="row">
@@ -167,7 +171,7 @@
         <h3> Close Contact </h3>
 
         <p>
-          Have you had close contact with a confirmed or probable case of COVID-19?
+          In the last 14 days, have you been identified as a “close contact”of someone who currently has COVID-19?
         </p>
 
         <div class="row">
@@ -218,6 +222,24 @@
 
           <label class="col s4 m2 l1">
             <input class="with-gap" name="covid_alert" value="off" type="radio" required />
+            <span>No</span>
+          </label>
+        </div>
+
+        <h3> Test Results </h3>
+
+        <p>
+          Is anyone you live with currently experiencing any new COVID-19 symptomsand/or waiting for test results after experiencing symptoms?
+        </p>
+
+        <div class="row">
+         <label class="col s4 m2 l1">
+           <input class="with-gap" name="test_results" value="on" type="radio" required />
+           <span>Yes</span>
+          </label>
+
+          <label class="col s4 m2 l1">
+            <input class="with-gap" name="test_results" value="off" type="radio" required />
             <span>No</span>
           </label>
         </div>
