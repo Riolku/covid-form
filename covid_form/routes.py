@@ -83,7 +83,6 @@ def serve():
 
 @app.route("/internal", methods = ['GET', 'POST'])
 def serve_internal():
-    print(flask.session)
     if flask.session.get('name') is None and request.remote_addr != whitelisted_ip:
         return redirect(get_oauth_uri(), code = 303)
 
