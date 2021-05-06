@@ -30,8 +30,6 @@
 
       <a href="{{ ext_url }}" style="position: absolute; left: 2vw; top: 2vw; width: 40vw; background-color: #ffffff55; padding: 8px;"><img src="/logo" width="100%" /></a>
 
-      <!--      {{ iframe | safe }} -->
-
       {% if status %}
 
       <div class="card-panel {{colour}}">{{msg}}</div>
@@ -45,9 +43,16 @@
 
           <div class="input-field" style="border: 1px solid #e8e8e8">
             <select required name="name" class="browser-default">
-              <option value="" disabled selected>Please select your name</option>
+              {% if not has_name %}
+                <option value="" disabled selected>Please select your name</option>
+              {% endif %}
+
               {% for id, name in employees %}
-                <option value="{{id}}">{{ name }}</option>
+                {% if name == selected_name %}
+                  <option value="{{ id }}" selected>{{ name }}</option>
+                {% else %}
+                  <option value="{{ id }}">{{ name }}</option>
+                {% endif %}  
               {% endfor %}
             </select>
           </div>
