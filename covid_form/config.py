@@ -11,7 +11,7 @@ app.config.update(dict(
     SQLALCHEMY_TRACK_MODIFICATIONS = False,
 
     SESSION_COOKIE_HTTPONLY = False,
-    SESSION_COOKIE_SAMESITE = 'Strict',
+    SESSION_COOKIE_SAMESITE = 'None',
     SESSION_COOKIE_SECURE = True,
 ))
 
