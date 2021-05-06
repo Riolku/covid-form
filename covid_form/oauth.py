@@ -23,11 +23,7 @@ def get_name_from_jwt(tk):
 def get_oauth_uri():
     nonce = get_nonce()
 
-    print(nonce)
-
     flask.session['nonce'] = nonce
-
-    print(flask.session)
 
     return f'https://login.microsoftonline.com/{org_guid}/oauth2/v2.0/authorize?' + urlencode(dict(
         client_id = client_id,
