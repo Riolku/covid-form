@@ -8,38 +8,42 @@ from .db import db, Employees, FormResponses
 from .config import CONF_DIR, ext_url, whitelisted_ip
 from .oauth import get_oauth_uri, get_name_from_jwt
 
+
 def form_val(key):
     return request.form.get(key)
 
+
 def check_form(key):
-    return form_val(key) == 'on'
+    return form_val(key) == "on"
+
 
 errcolour = "red accent-1"
+
 
 def parse_form(name, employee, organization):
     msg = ""
     colour = None
     status = None
 
-    symptoms = check_form('symptoms')
-    travel = check_form('travel')
-    contact = check_form('contact')
-    self_isolate = check_form('self_isolate')
-    covid_alert = check_form('covid_alert')
-    test_results = check_form('test_results')
+    symptoms = check_form("symptoms")
+    travel = check_form("travel")
+    contact = check_form("contact")
+    self_isolate = check_form("self_isolate")
+    covid_alert = check_form("covid_alert")
+    test_results = check_form("test_results")
 
-    r = FormResponses(name = name,
-                        organization = organization,
-                        employee = employee,
-
-                        symptoms = symptoms,
-                        travel = travel,
-                        contact = contact,
-                        self_isolate = self_isolate,
-                        covid_alert = covid_alert,
-                        test_results = test_results,
-
-                        time = int(time.time()))
+    r = FormResponses(
+        name=name,
+        organization=organization,
+        employee=employee,
+        symptoms=symptoms,
+        travel=travel,
+        contact=contact,
+        self_isolate=self_isolate,
+        covid_alert=covid_alert,
+        test_results=test_results,
+        time=int(time.time()),
+    )
 
     db.session.add(r)
     db.session.commit()
@@ -53,17 +57,17 @@ def parse_form(name, employee, organization):
     return msg, colour, status
 
 
-@app.route("/", methods = ["GET", "POST"])
+@app.route("/", methods=["GET", "POST"])
 def serve():
     msg = ""
     colour = None
     status = None
 
-    if 'name' in flask.session:
-        del flask.session['name']
+    if "name" in flask.session:
+        del flask.session["name"]
 
     if request.method == "POST":
-        name = form_val('name')
+        name = form_val("name")
         organization = form_val("organization")
 
         if name is None or not name.strip():
@@ -79,19 +83,22 @@ def serve():
         else:
             msg, colour, status = parse_form(name, None, organization)
 
-    return render_template("form.html", msg = msg, status = status, colour = colour, ext_url = ext_url)
+    return render_template(
+        "form.html", msg=msg, status=status, colour=colour, ext_url=ext_url
+    )
 
-@app.route("/internal", methods = ['GET', 'POST'])
+
+@app.route("/internal", methods=["GET", "POST"])
 def serve_internal():
-    if flask.session.get('name') is None and request.remote_addr != whitelisted_ip:
-        return redirect(get_oauth_uri(), code = 303)
+    if flask.session.get("name") is None and request.remote_addr != whitelisted_ip:
+        return redirect(get_oauth_uri(), code=303)
 
     msg = ""
     colour = None
     status = None
 
     if request.method == "POST":
-        name = form_val('name')
+        name = form_val("name")
 
         if not name.strip():
             msg = "Please select your name!"
@@ -99,27 +106,40 @@ def serve_internal():
             status = "error"
 
         else:
-            flask.session['name'] = Employees.query.filter_by(id = int(name)).first().name
+            flask.session["name"] = Employees.query.filter_by(id=int(name)).first().name
 
             msg, colour, status = parse_form(None, int(name), None)
 
-    employees = Employees.query.filter_by(active = True).order_by(Employees.name).all()
+    employees = Employees.query.filter_by(active=True).order_by(Employees.name).all()
 
-    name = flask.session.get('name', None)
+    name = flask.session.get("name", None)
 
-    has_name = Employees.query.filter_by(name = name).first() is not None
+    has_name = Employees.query.filter_by(name=name).first() is not None
 
-    return render_template("form.html", msg = msg, status = status, colour = colour, internal = True, ext_url = ext_url, employees = [(e.id, e.name) for e in employees], selected_name = name, has_name = has_name)
+    return render_template(
+        "form.html",
+        msg=msg,
+        status=status,
+        colour=colour,
+        internal=True,
+        ext_url=ext_url,
+        employees=[(e.id, e.name) for e in employees],
+        selected_name=name,
+        has_name=has_name,
+    )
 
-@app.route("/authorize", methods = ["POST"])
+
+@app.route("/authorize", methods=["POST"])
 def serve_authorization():
-    name = get_name_from_jwt(request.form['id_token'])
+    name = get_name_from_jwt(request.form["id_token"])
 
-    flask.session['name'] = name
+    flask.session["name"] = name
 
-    return redirect("/internal", code = 303)
+    return redirect("/internal", code=303)
 
-imgresp = Response(open(CONF_DIR + "logo.png", "rb").read(), mimetype = "image/png")
+
+imgresp = Response(open(CONF_DIR + "logo.png", "rb").read(), mimetype="image/png")
+
 
 @app.route("/logo")
 def serve_logo():
